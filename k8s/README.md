@@ -10,6 +10,8 @@ az aks get-credentials -g rgaztfpro02 -n aksaztfpro02
 kubectl create namespace basic
 ```
 
+Update the LoadBalancerIP in the <b>./values/nginx_ingress_values.yaml</b> file from the terraform output.
+
 ```bash
 helm install ingress-nginx ingress-nginx/ingress-nginx --namespace basic --values ./values/nginx_ingress_values.yaml
 ```
