@@ -117,7 +117,7 @@ resource "azurerm_kubernetes_cluster" "Aks" {
   automatic_channel_upgrade        = "patch"
   sku_tier                         = "Free"
   node_resource_group              = lower("mc-${var.Aks.RgName}-${var.Aks.Location}-${var.Aks.AksName}-${var.Aks.Suffix}")
-  http_application_routing_enabled = true
+  http_application_routing_enabled = var.Aks.AksHTTPAppRouting
 
   default_node_pool {
     name = "system"
@@ -127,9 +127,11 @@ resource "azurerm_kubernetes_cluster" "Aks" {
       project = "mini"
       source  = "tf"
     }
-    # node_taints = [
-    #   "node=system:NoSchedule"
-    # ]
+    # It seems we can't taint the default node pool from terraform. Prompts an error.
+    # Taints can be added later manually.
+    /*node_taints = [
+      "node=system:NoSchedule"
+    ]*/
     # node_count          = 1
     enable_auto_scaling = true
     min_count           = 1

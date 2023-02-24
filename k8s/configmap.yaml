@@ -3,5 +3,5 @@ kind: ConfigMap
 metadata:
   name: webapps-cm
 data:
-  TITLE_webapp_1: "Welcome to Azure Kubernetes Service (AKS) - webapp-1"
-  TITLE_webapp_2: "Welcome to Azure Kubernetes Service (AKS) - webapp-2"
+  TITLE_webapp_1: "Welcome to AKS from webapp-1"
+  TITLE_webapp_2: "Welcome to AKS from webapp-2"

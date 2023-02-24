@@ -14,12 +14,13 @@ variable "Aks" {
     LawName  = "law"
     AcrName  = "acr"
 
-    VnetName         = "vnet"
-    VnetAddressSpace = ["10.0.0.0/16"]
-    AksSubnetOneName = "aksonesubnet"
-    AksSubnetOneCIDR = ["10.0.8.0/22"]
-    AksSubnetTwoName = "akstwosubnet"
-    AksSubnetTwoCIDR = ["10.0.12.0/22"]
+    VnetName          = "vnet"
+    VnetAddressSpace  = ["10.0.0.0/16"]
+    AksSubnetOneName  = "aksonesubnet"
+    AksSubnetOneCIDR  = ["10.0.8.0/22"]
+    AksSubnetTwoName  = "akstwosubnet"
+    AksSubnetTwoCIDR  = ["10.0.12.0/22"]
+    AksHTTPAppRouting = true
 
     AksName = "aks"
     # GenKubeConfig = true
