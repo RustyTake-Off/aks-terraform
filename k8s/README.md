@@ -1,4 +1,4 @@
-## Get Aks credentials
+# Get Aks credentials
 
 ```bash
 az aks get-credentials -g rgaztfpro02 -n aksaztfpro02
@@ -10,7 +10,7 @@ az aks get-credentials -g rgaztfpro02 -n aksaztfpro02
 kubectl create namespace basic
 ```
 
-Update the LoadBalancerIP in the <b>./values/nginx_ingress_values.yaml</b> file from the terraform output.
+Update the LoadBalancerIP in the **./values/nginx_ingress_values.yaml** file from the terraform output.
 
 ```bash
 helm install ingress-nginx ingress-nginx/ingress-nginx --namespace basic --values ./values/nginx_ingress_values.yaml
@@ -18,7 +18,7 @@ helm install ingress-nginx ingress-nginx/ingress-nginx --namespace basic --value
 
 ## Install Cert-manager and apply cluster issuer
 
-Modify the email field in the <b>cluster_issuer.yaml</b> file.
+Modify the email field in the **cluster_issuer.yaml** file.
 
 ```bash
 helm install cert-manager jetstack/cert-manager --namespace basic --version v1.11.0 --values ./values/cert_manager_values.yaml

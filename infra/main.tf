@@ -15,7 +15,7 @@ terraform {
     }
     azapi = {
       source  = "azure/azapi"
-      version = "~>1.0"
+      version = "~> 1.0"
     }
     random = {
       source  = "hashicorp/random"
@@ -26,6 +26,11 @@ terraform {
       version = "~> 2.0"
     }
   }
+}
+
+####################################################################################################
+# Provider configuration
+provider "azurerm" {
 
   ##################################################
   # Backend for storing state files
@@ -35,10 +40,6 @@ terraform {
     container_name       = ""
     key                  = ""
   }*/
-}
 
-####################################################################################################
-# Provider configuration
-provider "azurerm" {
   features {}
 }

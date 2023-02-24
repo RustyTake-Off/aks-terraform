@@ -12,7 +12,7 @@ Clone this repository.
 git clone https://github.com/RustyTake-Off/aks-terraform.git
 ```
 
-Modify the variables in <b>variables.tf</b> file.
+Modify the variables in **variables.tf** file.
 
 ```bash
 terraform -chdir="./infra" plan

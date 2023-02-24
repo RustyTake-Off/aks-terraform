@@ -1,18 +1,14 @@
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
-  name: letsencrypt
+  name: letsencrypt-prod
 spec:
   acme:
     server: https://acme-v02.api.letsencrypt.org/directory
-    email: example@example.com
+    email: youremail@here.example
     privateKeySecretRef:
-      name: letsencrypt
+      name: letsencrypt-prod
     solvers:
       - http01:
           ingress:
             class: nginx
-            podTemplate:
-              spec:
-                nodeSelector:
-                  "kubernetes.io/os": linux

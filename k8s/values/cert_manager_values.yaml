@@ -1,5 +1,0 @@
-installCRDs: true
-extraArgs:
-  - --cluster-resource-namespace=basic
-global:
-  logLevel: 2

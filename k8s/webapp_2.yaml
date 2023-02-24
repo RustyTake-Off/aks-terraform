@@ -17,12 +17,34 @@ spec:
           image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
           ports:
             - containerPort: 80
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
           env:
             - name: TITLE
               valueFrom:
                 configMapKeyRef:
                   name: webapps-cm
                   key: TITLE_webapp_2
+      tolerations:
+        - key: "node"
+          operator: "Equal"
+          value: "worker"
+          effect: "PreferNoSchedule"
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: mini
+                    operator: In
+                    values:
+                      - project
+              topologyKey: topology.kubernetes.io/hostname
 ---
 apiVersion: v1
 kind: Service
@@ -58,4 +80,4 @@ spec:
         name: memory
         target:
           type: Utilization
-          averageUtilization: 50
+          averageUtilization: 30

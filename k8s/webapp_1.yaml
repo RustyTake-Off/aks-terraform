@@ -17,12 +17,41 @@ spec:
           image: mcr.microsoft.com/azuredocs/aks-helloworld:v1
           ports:
             - containerPort: 80
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
           env:
             - name: TITLE
               valueFrom:
                 configMapKeyRef:
                   name: webapps-cm
                   key: TITLE_webapp_1
+      tolerations:
+        - key: "node"
+          operator: "Exists"
+          effect: "NoSchedule"
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: color
+                    operator: In
+                    values:
+                      - red
+                      - blue
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 50
+              preference:
+                matchExpressions:
+                  - key: node
+                    operator: In
+                    values:
+                      - system
 ---
 apiVersion: v1
 kind: Service
@@ -58,4 +87,4 @@ spec:
         name: memory
         target:
           type: Utilization
-          averageUtilization: 50
+          averageUtilization: 30

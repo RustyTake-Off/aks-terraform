@@ -88,12 +88,20 @@ resource "azurerm_virtual_network" "Vnet" {
   address_space       = var.Aks.VnetAddressSpace
 }
 
-resource "azurerm_subnet" "AksSubnet" {
+resource "azurerm_subnet" "AksSubnetOne" {
 
-  name                 = var.Aks.AksSubnetName
+  name                 = var.Aks.AksSubnetOneName
   resource_group_name  = azurerm_resource_group.AksRg.name
   virtual_network_name = azurerm_virtual_network.Vnet.name
-  address_prefixes     = var.Aks.AksSubnetCIDR
+  address_prefixes     = var.Aks.AksSubnetOneCIDR
+}
+
+resource "azurerm_subnet" "AksSubnetTwo" {
+
+  name                 = var.Aks.AksSubnetTwoName
+  resource_group_name  = azurerm_resource_group.AksRg.name
+  virtual_network_name = azurerm_virtual_network.Vnet.name
+  address_prefixes     = var.Aks.AksSubnetTwoCIDR
 }
 
 ####################################################################################################
@@ -104,25 +112,35 @@ resource "azurerm_kubernetes_cluster" "Aks" {
   location            = azurerm_resource_group.AksRg.location
   resource_group_name = azurerm_resource_group.AksRg.name
 
-  dns_prefix                = lower("${var.Aks.AksName}${var.Aks.Suffix}")
-  kubernetes_version        = var.Aks.KubeVersion
-  automatic_channel_upgrade = "patch"
-  sku_tier                  = "Free"
-  node_resource_group       = lower("mc-${var.Aks.RgName}-${var.Aks.Location}-${var.Aks.AksName}-${var.Aks.Suffix}")
+  dns_prefix                       = lower("${var.Aks.AksName}${var.Aks.Suffix}")
+  kubernetes_version               = var.Aks.KubeVersion
+  automatic_channel_upgrade        = "patch"
+  sku_tier                         = "Free"
+  node_resource_group              = lower("mc-${var.Aks.RgName}-${var.Aks.Location}-${var.Aks.AksName}-${var.Aks.Suffix}")
+  http_application_routing_enabled = true
 
   default_node_pool {
-    name       = "systemnode"
-    node_count = 1
-    # enable_auto_scaling = true
-    # min_count           = 1
-    # max_count           = 2
-    max_pods        = 100
-    vm_size         = var.Aks.DefaultNodeVMSku
-    os_disk_size_gb = 50
-    os_sku          = "Ubuntu"
-    vnet_subnet_id  = azurerm_subnet.AksSubnet.id
-    scale_down_mode = "Delete"
-    type            = "VirtualMachineScaleSets"
+    name = "system"
+    node_labels = {
+      node    = "system"
+      color   = "red"
+      project = "mini"
+      source  = "tf"
+    }
+    # node_taints = [
+    #   "node=system:NoSchedule"
+    # ]
+    # node_count          = 1
+    enable_auto_scaling = true
+    min_count           = 1
+    max_count           = 2
+    max_pods            = 100
+    vm_size             = var.Aks.DefaultNodeVMSku
+    os_disk_size_gb     = 50
+    os_sku              = "Ubuntu"
+    vnet_subnet_id      = azurerm_subnet.AksSubnetOne.id
+    scale_down_mode     = "Delete"
+    type                = "VirtualMachineScaleSets"
   }
 
   identity {
@@ -135,6 +153,8 @@ resource "azurerm_kubernetes_cluster" "Aks" {
     service_cidr       = try(var.Aks.ServiceCIDR, null)
     dns_service_ip     = try(var.Aks.DNSServiceIP, null)
     docker_bridge_cidr = try(var.Aks.DockerBridgeCIDR, null)
+    pod_cidr           = try(var.Aks.PodCIDR, null)
+    network_policy     = try(var.Aks.NetworkPolicy, null)
   }
 
   linux_profile {
@@ -161,19 +181,27 @@ data "azurerm_kubernetes_cluster" "Aks" {
 # Additional Aks Node Pool resource configuration
 resource "azurerm_kubernetes_cluster_node_pool" "Aks" {
 
-  name                  = "workernode"
+  name = "worker"
+  node_labels = {
+    node    = "worker"
+    color   = "blue"
+    project = "mini"
+    source  = "tf"
+  }
+  node_taints = [
+    "node=worker:NoSchedule"
+  ]
   kubernetes_cluster_id = azurerm_kubernetes_cluster.Aks.id
   vm_size               = var.Aks.AksWorkerNodeVmSku
-
-  node_count = 1
-  # enable_auto_scaling = true
-  # min_count           = 1
-  # max_count           = 2
-  max_pods        = 100
-  os_disk_size_gb = 50
-  os_sku          = "Ubuntu"
-  os_type         = "Linux"
-  vnet_subnet_id  = azurerm_subnet.AksSubnet.id
+  # node_count            = 1
+  enable_auto_scaling = true
+  min_count           = 1
+  max_count           = 2
+  max_pods            = 100
+  os_disk_size_gb     = 50
+  os_sku              = "Ubuntu"
+  os_type             = "Linux"
+  vnet_subnet_id      = azurerm_subnet.AksSubnetOne.id
 }
 
 ####################################################################################################
