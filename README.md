@@ -1,8 +1,8 @@
 # aks-terraform
 
-## [Project](https://github.com/RustyTake-Off/projects)
+## [Projects](https://github.com/RustyTake-Off/projects)
 
-Create an Aks cluster and a K8s deployment with Nginx, Cert-Manager and Let's Encrypt.
+[Mini Project] - Create an Aks cluster and a K8s deployment with Nginx, Cert-Manager and Let's Encrypt.
 
 ## The how?
 
