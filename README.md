@@ -2,7 +2,7 @@
 
 ## [Projects](https://github.com/RustyTake-Off/projects)
 
-[Project] - Create an Aks cluster and a K8s deployment with Nginx, Cert-Manager and Let's Encrypt.
+Create an Aks cluster and a K8s deployment with Nginx, Cert-Manager and Let's Encrypt.
 
 ## The how?
 
